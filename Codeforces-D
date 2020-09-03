@@ -1,0 +1,30 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+int n, m, k;
+string s,t;
+int dp[1005][1005][12][2];
+int solve(int idx_s,int idx_t,int rem,int conti){
+    if (idx_s == n || idx_t == m)
+        return ((rem==0)?0:INT_MIN);
+    if(rem==0)
+        return 0;
+    if(dp[idx_s][idx_t][rem][conti]!=-1)
+        return dp[idx_s][idx_t][rem][conti];;
+    int ans=INT_MIN;
+    ans=max(ans,solve(idx_s+1,idx_t,rem-conti,0));
+    ans=max(ans,solve(idx_s,idx_t+1,rem-conti,0));
+    if (s[idx_s] == t[idx_t]){
+        ans=max(ans,1+solve(idx_s+1,idx_t+1,rem,1));
+        ans=max(ans,1+solve(idx_s+1,idx_t+1,rem-1,0));
+    }
+    return dp[idx_s][idx_t][rem][conti]=ans;
+}
+int main() {
+	// your code goes here
+	cin>>n>>m>>k;
+	cin>>s>>t;
+	memset(dp,-1,sizeof(dp));
+	cout<<solve(0,0,k,0);
+	return 0;
+}
